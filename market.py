@@ -1,5 +1,5 @@
 def get_prices(file_path, file_name):
-    with open('C:\\!\\CODING\\ED\\J\\Market.json') as f:
+    with open(file_path + file_name) as f:
         lines = f.readlines()
 
     station = {}
