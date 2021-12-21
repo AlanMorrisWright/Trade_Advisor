@@ -1,6 +1,6 @@
 def get_prices(file_path, file_name):
     """
-    converts Elite Dangerous marketplace data from JSON to dict
+    converts Elite Dangerous marketplace - station and prices - data from JSON to dict
     :param file_path: of the JSON
     :param file_name: of the JSOM
     :return: dict of station details, list of dicts of commodity details
