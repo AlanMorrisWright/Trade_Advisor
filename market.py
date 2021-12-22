@@ -36,3 +36,8 @@ def get_prices(file_path, file_name):
                     )
                     prices.append(item_prices)
     return station, prices
+
+
+def testing():
+    station, prices = get_prices('C:\\Users\\alanm\\Saved Games\\Frontier Developments\\Elite Dangerous\\', 'Market.json')
+    print(station)  #, prices)

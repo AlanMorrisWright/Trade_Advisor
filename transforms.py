@@ -10,14 +10,22 @@ def change_type(val, value_type):
         case 'string':
             return val
         case 'float':
+            if val == 'null':
+                return float(0)
             return float(val)
+        case 'integer':
+            if val == 'null':
+                return int(0)
+            return int(val)
         case 'boolean':
-            return val == 'true'
+            if val == 'true' or val == 1:
+                return True
+            return False
         case _:
             return val
 
 
-def get_key_val(look_for, line):
+def get_key_value(look_for, line):
     """
     :param look_for: tuple of name, type
     :param line: string to search
@@ -31,25 +39,3 @@ def get_key_val(look_for, line):
     val_end_id = line.find(',', key_start_id)
     k, v = line[key_start_id:val_end_id].replace('"', '').split(':')
     return change_type(v, look_for_type)
-
-
-def get_systems(file_path, file_name):
-    """
-    grabs system name, co-ords and permit requirements
-    :param file_path:
-    :param file_name:
-    :return:
-    """
-
-    # load the file completely
-    with open(file_path + file_name) as f:
-        lines = f.readlines()
-
-    # systems ..[name, x, y, z, permit]
-    systems = []
-    for line in lines:
-        this_system = []
-        for f in [['name', 'string'], ['x', 'float'], ['y', 'float'], ['z', 'float'], ['needs_permit', 'boolean']]:
-            this_system.append(get_key_val(f, line))
-        systems.append(this_system)
-    return systems

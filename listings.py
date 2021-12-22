@@ -4,7 +4,7 @@ import csv
 def get_listings_prices(file_path, file_name):
     """
     listings.csv
-    CSV file rows: 6_800_823 (2021 12 20
+    CSV file rows: 6_800_823 (2021 12 20)
     CSV file columns:
         # 0: 'id'
         # 1: 'station_id'
@@ -30,4 +30,4 @@ def get_listings_prices(file_path, file_name):
         data = [[int(row[1]), int(row[2]), int(row[3]),
                  int(row[5]), int(row[6]), int(row[7]),
                  int(row[9])] for row in reader if row]
-    return headings, data
+    return data
