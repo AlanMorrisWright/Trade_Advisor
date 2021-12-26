@@ -20,6 +20,10 @@ def get_listings_prices(file_path, file_name):
     :param file_name:
     :return:
     """
+    # from csv read some of the columns
+    #    read the headers
+    #    read the data
+    # return as a list
     with open(file_path + file_name, newline='') as f:
         reader = csv.reader(f, delimiter=',', quotechar='"')
         all_headings = next(reader)

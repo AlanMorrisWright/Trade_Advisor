@@ -1,36 +1,33 @@
 def change_type(val, value_type):
-    """
-    converts a string to different type
-    :param val:
-    :param value_type:
-    :return:
-    """
+    # returns string converted to type specified
 
-    match value_type:
-        case 'string':
-            return val
-        case 'float':
-            if val == 'null':
-                return float(0)
+    if value_type == 'string':
+        return val
+    elif value_type == 'float':
+        if val == 'null':
+            return float(0)
+        else:
             return float(val)
-        case 'integer':
-            if val == 'null':
-                return int(0)
+    elif value_type == 'integer':
+        if val == 'null':
+            return int(0)
+        else:
             return int(val)
-        case 'boolean':
-            if val == 'true' or val == 1:
-                return True
+    elif value_type == 'boolean':
+        if val == 'true' or val == 1:
+            return True
+        else:
             return False
-        case _:
-            return val
+    else:
+        return val
 
 
 def get_key_value(look_for, line):
-    """
-    :param look_for: tuple of name, type
-    :param line: string to search
-    :return: value of a 'key' found, from a string
-    """
+    # looks for a string 'look_for[0]' in string 'line'
+    #   find char where <look for> is found, wrapped within '"<look for>":'
+    #   last char is next 'comma'
+    #   remove quotes and split using ':'
+    #   return the value, passing through type converter
 
     look_for_item = look_for[0]
     look_for_type = look_for[1]
