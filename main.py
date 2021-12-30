@@ -1,5 +1,7 @@
+from time import time
 from ETL import get_json
-from market import get_prices
+# from market import get_prices
+# from allsystems import get_station_systems
 from listings import get_listings_prices
 
 
@@ -25,7 +27,7 @@ def testing():
         print(price)
 
 
-def main():
+def test2():
     # testing()
     # station, prices = get_prices('C:\\Users\\alanm\\Saved Games\\Frontier Developments\\Elite Dangerous\\', 'Market.json')
 
@@ -56,6 +58,52 @@ def main():
     system_id = this_station[1]
     this_system = systems[system_id]
     print(f'system_id {system_id}: {this_system}')
+
+
+def main2():
+    start_seconds = time()
+    # systems = get_json('systems_populated.jsonl', 'C:\\!\\CODING\\ED\\EDDB_Data\\', None,
+    #                    [['id', 'integer'], ['name', 'string'], ['needs_permit', 'boolean'],
+    #                     ['x', 'float'], ['y', 'float'], ['z', 'float']])
+    systems = get_json('systems.jsonl', 'C:\\!\\CODING\\ED\\EDDB_Data\\', None,
+                       [['id', 'integer'], ['name', 'string'], ['needs_permit', 'boolean'],
+                        ['x', 'float'], ['y', 'float'], ['z', 'float']])
+    stations = get_json('stations.jsonl', 'C:\\!\\CODING\\ED\\EDDB_Data\\', None,
+                        [['id', 'integer'], ['name', 'string'], ['system_id', 'integer'], ['updated_at', 'integer'],
+                         ['max_landing_pad_size', 'string'], ['distance_to_star', 'integer'],
+                         ['market_updated_at', 'string'], ['is_planetary', 'boolean']])
+    out_header = ['system_name', 'x', 'y', 'z',
+                  'station_name', 'distance_to_star', 'pad_size']
+    print(f'reading took: {time() - start_seconds:.1f}s')
+    print(f'stations: {len(stations)}')
+    print(type(stations))
+
+    for station in stations:
+        station_details = stations[station]
+        if station == 290534:
+            if station_details[3] == 'L' and station_details[4] < 100 and not station_details[6]:
+                try:
+                    system_details = systems[station_details[1]]
+                except:
+                    system_details = ['none']
+                print(station,
+                      station_details,
+                      # [station_details[x] for x in (0, 4)],
+                      system_details)
+
+    print(systems[703])
+
+
+def main():
+    stations = get_json('stations.jsonl', 'C:\\!\\CODING\\ED\\EDDB_Data\\', 'notdictionary', None,
+                        [['id', 'integer'], ['name', 'string'], ['system_id', 'integer'], ['updated_at', 'integer'],
+                         ['max_landing_pad_size', 'string'], ['distance_to_star', 'integer'],
+                         ['market_updated_at', 'string'], ['is_planetary', 'boolean']])
+    for station in stations:
+        # print(station, stations[station])
+        print(station)
+
+    # get_station_systems('C:\\!\\CODING\\ED\\EDDB_Data\\', 'systems.csv', stations)
 
 
 if __name__ == '__main__':
