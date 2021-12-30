@@ -16,23 +16,21 @@ def count_rows(file_path, file_name):
 
 def change_type(val, value_type):
     # returns string converted to type specified
-    if value_type == 'string':
-        return val
+    if value_type == 'int':
+        if val == 'null':
+            return int(0)
+        else:
+            return int(val)
     elif value_type == 'float':
         if val == 'null':
             return float(0)
         else:
             return float(val)
-    elif value_type == 'integer':
-        if val == 'null':
-            return int(0)
+    elif value_type == 'bool':
+        if val == 'false' or val == 0 or val is None:
+            return 0
         else:
-            return int(val)
-    elif value_type == 'boolean':
-        if val == 'true' or val == 1:
-            return True
-        else:
-            return False
+            return 1
     else:
         return val
 
@@ -83,13 +81,6 @@ def get_json(file_name, file_path, return_type, split_chars, fields):
     return results
 
 
-def get_stations():
-    return get_json('stations.jsonl', 'C:\\!\\CODING\\ED\\EDDB_Data\\', 'list', None,
-                    [['id', 'integer'], ['name', 'string'], ['system_id', 'integer'], ['updated_at', 'integer'],
-                    ['max_landing_pad_size', 'string'], ['distance_to_star', 'integer'],
-                    ['market_updated_at', 'string'], ['is_planetary', 'boolean']])
-
-
 def csv_to_db(file_path, file_name, db, tbl, fields):
     con = sqlite3.connect(db)
     cur = con.cursor()
@@ -125,6 +116,7 @@ def json_to_db(file_path, file_name, split_chars, db, tbl, fields):
     #   so split the single element (making multiple lines)
     #   once read then for each line look for fields and find values
     #   the dict key is element [0] which is the id
+    print(db)
     con = sqlite3.connect(db)
     cur = con.cursor()
     q = ('?, ' * len(fields[0]))[:-2]
@@ -156,24 +148,3 @@ def json_to_db(file_path, file_name, split_chars, db, tbl, fields):
             print(f'{i/1_000_000:.1f}mill: {100 * i / rows:.1f}%: {time_left:.1f}s:: {this}')
         cur.execute('INSERT INTO ' + tbl + ' VALUES (' + q + ')', this)
     con.commit()
-
-
-# stations = get_stations()
-if 0:
-    # systems
-    csv_to_db('C:\\!\\CODING\\ED\\EDDB_Data\\',
-              'systems.csv',
-              'C:\\!\\CODING\\ED\\EDDB_Data\\moz.db',
-              'systems',
-              [(0, 2, 3, 4, 5, 19),
-               ('id', 'name', 'x', 'y', 'z', 'needs_permit'),
-               ('integer', 'string', 'float', 'float', 'float', 'boolean')])
-
-# stations
-json_to_db('C:\\!\\CODING\\ED\\EDDB_Data\\',
-           'stations.jsonl',
-           None,
-           'C:\\!\\CODING\\ED\\EDDB_Data\\moz.db',
-           'stations',
-           [['id', 'name', 'system_id', 'max_landing_pad_size', 'distance_to_star', 'is_planetary'],
-            ['integer', 'string', 'integer', 'string', 'integer', 'boolean']])
