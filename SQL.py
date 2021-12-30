@@ -1,3 +1,4 @@
+import vars
 import sqlite3
 import time
 
