@@ -27,7 +27,7 @@ def change_type(val, value_type):
         else:
             return float(val)
     elif value_type == 'bool':
-        if val == 'false' or val == 0 or val is None:
+        if val in ('0', 'false') or val == 0 or val is None:
             return 0
         else:
             return 1
@@ -112,8 +112,8 @@ def json_to_db(file_path, file_name, split_chars, db, tbl, fields):
     # todo: do this?... cur.executemany("insert into stations values (?, ?)", lang_list)
     # looks for string in string (from fields) and returns value of it
     #   read the complete json into a list
-    #   jsonl loads as line delimited, json just as a single element
-    #   so split the single element (making multiple lines)
+    #   jsonl loads as line delimited, json just as a single line
+    #   so split the single line (making multiple lines)
     #   once read then for each line look for fields and find values
     #   the dict key is element [0] which is the id
     print(db)
