@@ -1,44 +1,37 @@
+from ETL import key_value
+
+
 def get_prices(file_path, file_name):
-    """
-    converts Elite Dangerous marketplace - station and prices - data from JSON to dict
-    :param file_path: of the JSON
-    :param file_name: of the JSOM
-    :return: dict of station details, list of dicts of commodity details
-    """
-    #
+    # 2 parts to EDs file - station details and prices
+    #   read station details
+    #   read commodity prices
+
     with open(file_path + file_name) as f:
         lines = f.readlines()
 
-    station = {}
-    prices = []
-    i = 0
-    for line in lines:
-        if line:
-            if i == 0:
-                neat_line = line\
-                    .replace('{ ', '')\
-                    .replace(', "Items":[ ', '')\
-                    .replace(chr(10), '')\
-                    .replace('":', '"|')\
-                    .replace('"', '')
-                station = dict((k.strip(), v.strip()) for k, v in (item.split('|') for item in neat_line.split(',')))
-                i = i + 1
-            else:
-                neat_line = line\
-                    .replace('{ ', '')\
-                    .replace(' },', '')\
-                    .replace(' }', '')\
-                    .replace(chr(10), '')\
-                    .replace('":', '"|')\
-                    .replace('"', '')
-                if neat_line[:3] == 'id|':
-                    item_prices = dict(
-                        (k.strip(), v.strip()) for k, v in (item.split('|') for item in neat_line.split(','))
-                    )
-                    prices.append(item_prices)
-    return station, prices
+    station = []
+    fields = (('timestamp', 'MarketID'),  # , 'StationName', 'StationType', 'StarSystem'),
+              ('sec1970', 'int'))  # , 'str', 'str', 'str'))
+    line = lines[0]
+    if fields[0][0] in line:
+        for j, field in enumerate(fields[0]):
+            val = key_value(field, line, fields[1][j])
+            station.append(val)
 
+    market = []
+    fields = (('Name_Localised', 'BuyPrice', 'SellPrice', 'Stock', 'Demand', 'Rare'),
+              ('str', 'int',  'int',  'int',  'int', 'bool'))
+    for line in lines[1:]:
+        if fields[0][0] in line:
+            this = []
+            for j, field in enumerate(fields[0]):
+                val = key_value(field, line, fields[1][j])
+                this.append(val)
+            market.append(this)
 
-def testing():
-    station, prices = get_prices('C:\\Users\\alanm\\Saved Games\\Frontier Developments\\Elite Dangerous\\', 'Market.json')
-    print(station)  #, prices)
+    for line in market:
+        o = list(station)
+        o.extend(line)
+        print(o)
+
+get_prices('C:\\Users\\alanm\\Saved Games\\Frontier Developments\\Elite Dangerous\\', 'Market.json')
