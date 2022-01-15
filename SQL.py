@@ -25,7 +25,7 @@ def execute_sql(query_text):
     return results
 
 
-def create_and_fill_systems():
+def etl_systems():
     """
     drops table first, then remakes and reads in data from 'systems.csv'
     :return: none
@@ -60,7 +60,7 @@ def create_and_fill_systems():
     execute_sql('create unique index systems_index on systems (id);')
 
 
-def create_and_fill_listings():
+def etl_listings():
     """
     drops table first, then remakes and reads in data from 'listings.csv'
     :return: none
@@ -98,7 +98,7 @@ def create_and_fill_listings():
     execute_sql('create unique index listings_index on ' + tbl + ' (station_id, commodity_id);')
 
 
-def create_and_fill_commodities():
+def etl_commodities():
     """
     drops table first, then remakes and reads in data from 'commodities.json'
     :return: none
@@ -130,7 +130,7 @@ def create_and_fill_commodities():
     execute_sql('create unique index commodity_index on commodities (id);')
 
 
-def create_and_fill_stations():
+def etl_stations():
     """
     drops table first, then remakes and reads in data from 'stations.jsonl'
     :return: none

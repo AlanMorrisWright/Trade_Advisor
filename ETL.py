@@ -12,6 +12,16 @@ def list_to_csv(this_list, destination):
 
 
 def row_count(file_path, file_name, force):
+    """
+    returns count of rows in file
+    systems.csv shortcut whilst deving, use this to get rows..
+      print(row_count(gl.EDDB_PATH, 'systems.csv', True))
+
+    :param file_path:
+    :param file_name:
+    :param force:
+    :return:
+    """
     # returns count of rows
     # systems.csv shortcut whilst deving, use this to get rows..
     #   print(row_count(gl.EDDB_PATH, 'systems.csv', True))
@@ -24,28 +34,38 @@ def row_count(file_path, file_name, force):
     return rows
 
 
-def change_type(val, value_type):
-    # returns string converted to type specified
+def change_type(string_val, value_type):
+    """
+    returns string converted to value type specified
+      'int': integer
+      'float': float
+      'bool': numeric 0 or 1
+      'sec1970': converts seconds since 1970-01-01 to datetime
+
+    :param string_val: string to convert
+    :param value_type: return type
+    :return: the string converted to required value type
+    """
     if value_type == 'int':
-        if val == 'null':
+        if string_val == 'null':
             return int(0)
         else:
-            return int(val)
+            return int(string_val)
     elif value_type == 'float':
-        if val == 'null':
+        if string_val == 'null':
             return float(0)
         else:
-            return float(val)
+            return float(string_val)
     elif value_type == 'bool':
         # sqlite3 does not have a bool type, so use 0/1
-        if val in ('0', 'false') or val == 0 or val is None:
+        if string_val in ('0', 'false') or string_val == 0 or string_val is None:
             return 0
         else:
             return 1
     elif value_type == 'sec1970':
-        return timegm(time.strptime(val, '%Y-%m-%dT%H:%M:%SZ'))
+        return timegm(time.strptime(string_val, '%Y-%m-%dT%H:%M:%SZ'))
     else:
-        return val
+        return string_val
 
 
 def key_value(look_for, line, value_type):

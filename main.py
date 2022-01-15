@@ -1,9 +1,30 @@
 import gl
-from SQL import table_headings
+import SQL
+
+
+def etl_eddb():
+    SQL.etl_systems()
+    SQL.etl_listings()
+    SQL.etl_commodities()
+    SQL.etl_stations()
+    SQL.create_stations_full()
+
+
+def profits():
+    SQL.create_near_stations(30)
+    SQL.create_profits()
+    tbl = 'profits'
+    out_csv = [SQL.table_headings(tbl)]
+    q = 'select * from ' + tbl + ';'
+    result = SQL.execute_sql(q)
+    out_csv.extend(list(result))
+    SQL.list_to_csv(out_csv, gl.DB_PATH + tbl + '.csv')
 
 
 def main():
-    print(table_headings('stations'))
+    # print(table_headings('stations'))
+    # etl_eddb()
+    profits()
 
 
 if __name__ == '__main__':
@@ -12,28 +33,16 @@ if __name__ == '__main__':
 
 
 
-def prep_out():
-    create_near_stations(30)
 
 
-def out():
-    create_outbound()
-    create_inbound()
-    create_profits()
-    tbl = 'profits'
-    out_csv = [table_headings(tbl)]
-    q = 'select * from ' + tbl + ';'
-    result = execute_sql(q)
-    out_csv.extend(list(result))
-    list_to_csv(out_csv, gl.DB_PATH + tbl + '.csv')
 
 
-def load_new_eddb():
-    create_and_fill_systems()
-    create_and_fill_listings()
-    create_and_fill_commodities()
-    create_and_fill_stations()
-    create_stations_full()
+
+
+
+
+
+
 
 
 # load_new_eddb()
@@ -44,10 +53,10 @@ def load_new_eddb():
 # table_headings(table_name)
 # execute_sql(query_text)
 
-# create_and_fill_systems()
-# create_and_fill_listings()
-# create_and_fill_commodities()
-# create_and_fill_stations()
+# etl_systems()
+# etl_listings()
+# etl_commodities()
+# etl_stations()
 # create_stations_full()
 
 # create_near_stations(jump_range)
@@ -138,3 +147,13 @@ select * from systems order by (x-(-7796.9044261143))*(x-(-7796.9044261143))    
 
 #for waypoint in waypoints:
 #    print(waypoint)
+
+
+
+
+
+
+
+
+
+
