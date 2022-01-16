@@ -388,3 +388,64 @@ def create_profits():
         ;
         """
     execute_sql(q)
+
+
+def nearest_stations(my_x, my_y, my_z):
+    """
+     generates 'nearest_station.csv' with nearest 20 stations to x, y, z passed
+     only stations with...
+       is_planetary = 0
+       type <> 'Fleet Carrier'
+
+    :return: none
+    """
+    tbl = 'nearest_station'
+
+    print(tbl + ': dropping..')
+    execute_sql('drop table if exists ' + tbl + ';')
+
+    print(tbl + ': create as..')
+    q = """
+        CREATE TABLE """ + tbl + """ as
+        select
+        st.id,
+        st.name as station_name,
+        st.max_landing_pad_size,
+        st.distance_to_star,
+        st.type,
+        st.is_planetary,
+
+        st.system_id,
+        sy.name,
+        sy.x,
+        sy.y,
+        sy.z,
+        sy.needs_permit,
+        
+          (sy.x - (""" + str(my_x) + """)) * (sy.x - (""" + str(my_x) + """))
+        + (sy.y - (""" + str(my_y) + """)) * (sy.y - (""" + str(my_y) + """))
+        + (sy.z - (""" + str(my_z) + """)) * (sy.z - (""" + str(my_z) + """)) as dis2
+
+        from
+        stations st join
+        systems sy on sy.id = st.system_id
+
+        where
+        st.is_planetary = 0 and
+        st.type <> 'Fleet Carrier'
+
+        order by
+          (sy.x - (""" + str(my_x) + """)) * (sy.x - (""" + str(my_x) + """))
+        + (sy.y - (""" + str(my_y) + """)) * (sy.y - (""" + str(my_y) + """))
+        + (sy.z - (""" + str(my_z) + """)) * (sy.z - (""" + str(my_z) + """))
+
+        limit 20
+
+        """
+    execute_sql(q)
+
+    out_csv = [table_headings(tbl)]
+    q = 'select * from ' + tbl + ';'
+    result = execute_sql(q)
+    out_csv.extend(list(result))
+    list_to_csv(out_csv, gl.DB_PATH + tbl + '.csv')

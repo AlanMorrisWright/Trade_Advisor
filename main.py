@@ -11,7 +11,7 @@ def etl_eddb():
 
 
 def profits():
-    SQL.create_near_stations(30)
+    # SQL.create_near_stations(30)
     SQL.create_profits()
     tbl = 'profits'
     out_csv = [SQL.table_headings(tbl)]
@@ -24,7 +24,8 @@ def profits():
 def main():
     # print(table_headings('stations'))
     # etl_eddb()
-    profits()
+    # profits()
+    SQL.nearest_stations(-2549, -1263, 5422)
 
 
 if __name__ == '__main__':
