@@ -257,7 +257,7 @@ def create_near_stations(jump_range):
     execute_sql('create unique index near_stations_index on near_stations (id_a, id_b);')
 
 
-def create_profits():
+def create_profits(cargo_capacity):
     """
     makes a table of near stations, and profit by commodity
       parse 'near_stations' - make outbound table of profitable commodities, where
@@ -352,6 +352,12 @@ def create_profits():
         o.station_id_ao as station_id_a,
         o.station_id_bo as station_id_b,
         coalesce(o.profit_o, 0) + coalesce(i.profit_i, 0) as profit,
+        
+        (coalesce(o.profit_o, 0) + coalesce(i.profit_i, 0)) * """ + str(cargo_capacity) + """ as profit_cr,
+
+        max(sta.distance_to_star, stb.distance_to_star) as max_distance_to_star,
+
+                       
         --1.0 * coalesce(o.profit_o, 0) / (coalesce(o.profit_o, 0) + coalesce(i.profit_i, 0)) as profit_o_prop,
 
         -- outbound

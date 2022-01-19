@@ -10,9 +10,9 @@ def etl_eddb():
     SQL.create_stations_full()
 
 
-def profits():
-    # SQL.create_near_stations(30)
-    SQL.create_profits()
+def profits(jump_range, cargo_capacity):
+    # SQL.create_near_stations(jump_range)
+    SQL.create_profits(cargo_capacity)
     tbl = 'profits'
     out_csv = [SQL.table_headings(tbl)]
     q = 'select * from ' + tbl + ';'
@@ -24,8 +24,11 @@ def profits():
 def main():
     # print(table_headings('stations'))
     # etl_eddb()
-    # profits()
-    SQL.nearest_stations(-2549, -1263, 5422)
+
+    jump_range = 18
+    cargo_capacity = 560
+    profits(jump_range, cargo_capacity)
+    # SQL.nearest_stations(-2549, -1263, 5422)
 
 
 if __name__ == '__main__':
