@@ -25,8 +25,8 @@ def main():
     # print(table_headings('stations'))
     # etl_eddb()
 
-    jump_range = 18
-    cargo_capacity = 560
+    jump_range = 16.79
+    cargo_capacity = 700
     profits(jump_range, cargo_capacity)
     # SQL.nearest_stations(-2549, -1263, 5422)
 
